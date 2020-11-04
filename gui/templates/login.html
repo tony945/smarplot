@@ -28,7 +28,14 @@
                 {% csrf_token %}
                 <input id="login" class="fadeIn second" name="username" type="text" placeholder="username"><br>
                 <input id="password" class="fadeIn third" name="password" type="password" placeholder="password"><br>
-                {{hint}}<br>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
                 <button id="btn" class="fadeIn fourth" type="submit">登錄</button>
             </form>
 
