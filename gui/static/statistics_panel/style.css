@@ -1,0 +1,38 @@
+/* BASIC */
+
+body {
+    background-color: rgb(162, 185, 230);
+    padding-top: 76px; 
+}
+
+
+
+/* STRUCTURE */
+
+.dropdown-menu {
+    text-align: center;
+}
+
+.navlist {
+    font-size: 2em;
+}
+
+.navlog {
+    font-size: 1.5em;
+}
+
+.nav-items-space {
+    margin-right:1.5em;
+}
+
+.chartblock {
+    margin-top:50px;
+}
+
+.month {
+    display:none;
+}
+
+.year {
+    display:none;
+}

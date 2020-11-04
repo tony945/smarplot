@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {%load bootstrap4%}
+    {%bootstrap_css%}
+    {%bootstrap_javascript%}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index/style.css' %}">
+</head>
+
+<body style="background-color: rgb(162, 185, 230);">
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <h2>SmartPot</h2>
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="{% static 'index/plant.svg' %}" id="icon" alt="Plot Icon" />
+            </div>
+
+            <!-- Login Form -->
+            <form method="POST" action="/login_action/">
+                {% csrf_token %}
+                <input id="login" class="fadeIn second" name="username" type="text" placeholder="username"><br>
+                <input id="password" class="fadeIn third" name="password" type="password" placeholder="password"><br>
+                {{hint}}<br>
+                <button id="btn" class="fadeIn fourth" type="submit">登錄</button>
+            </form>
+
+            <!-- Register or Reset Password -->
+            <div id="formFooter">
+                <div>
+                    <h10>New to SmartPot ? </h10><a class="underlineHover" href='/register/'>Register</a>
+                </div>
+                <div class="footerdown">
+                    <a class="underlineHover" href="/password_reset">Forgot Password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
