@@ -30,6 +30,14 @@
                 <input id="password" name="password" type="password" placeholder="password"><br>
                 <input id="password" name="passwordcheck" type="password" placeholder="retype password"><br>
                 <input id="email" name="email" type="text" placeholder="emailAddress"><br>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                
                 <button id="btn" type="submit">送出</button>
             </form>
         </div>

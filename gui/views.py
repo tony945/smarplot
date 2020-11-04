@@ -27,11 +27,11 @@ def login_action(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None :
             auth.login(request, user)  # 登錄
-            request.session['user'] = username    # 將 session 資訊記錄到瀏覽器
-            
+            request.session['user'] = username    # 將 session 資訊記錄到瀏覽器       
             return HttpResponseRedirect('/realtime_panel/')
         else:
-            return render(request, 'login.html', {'hint': 'Username or password error!'})
+            messages.error(request,"Username or password error!")
+            return render(request, 'login.html')
 
 # 註冊頁面
 
@@ -45,17 +45,23 @@ def register_action(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     email = request.POST.get('email','')
-    user = User.objects.create_user(username,email,password)
-
+    user = User.objects.get(username=username)
+    
+    if user is None:
+        User.objects.create_user(username,email,password)
+        messages.success(request,"Register successful. Please login!")
+        return render(request,'login.html')
+    else:
+        messages.error(request,"The username is already used. Please change one!")
+        return render(request,'register.html')
     # At this point, user is a User object that has already been saved 
     # to the database. You can countinue to change its attributes
     # if you want to change other fields.
     # user.last_name = 'Lennon'
     # user.save() 
-    return render(request, 'login.html', {'hint': 'Register successful. Please login!'})
 
 # 註冊帳號檢查動作
-
+# preserved for further user check
 def account_check_action(request):
     username = request.GET.get('username','')
     user = User.objects.get(username=username)
@@ -129,12 +135,12 @@ def password_reset_request(request):
                         return HttpResponse('Invalid header found.')
                     messages.success(request, 'A message with reset password instruction has been sent to your email address.')
                     return HttpResponseRedirect("/login/")
-            messages.reset.error(request, 'An invalid email has been entered.')
+            messages.error(request, 'An invalid email has been entered.')
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
 
 # 處理及時資訊更新
-
+# Applying Django Channel for Websocket
 @login_required
 def realtime_data_refresh(request):
     return HttpResponse(data)
