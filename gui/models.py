@@ -16,13 +16,13 @@ class SensorRecord(models.Model):
     plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
     pressure=models.FloatField()
     temperature=models.FloatField()
-    humidity=models.FloatField()
+    soil=models.FloatField()
     light=models.FloatField()
     create_time=models.DateTimeField(auto_now=True)
 
     @classmethod
     def __str__(self):
-        return self.record_id
+        return 'Temperature %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.light, self.soil)
 
 # 澆花紀錄
 class WaterRecord(models.Model):
@@ -34,7 +34,7 @@ class WaterRecord(models.Model):
 
     @classmethod
     def __str__(self):
-        return self.water_id
+        return 'Recent watering time is %s.'%(self.create_time)
 
 # 操作紀錄
 class OperationRecord(models.Model):
@@ -67,4 +67,27 @@ class PotStatus(models.Model):
 
     @classmethod
     def current_pot_status(self):
-        return 'Status: Light is %s.</br> Autowatering is %s.</br> Manualwatering is %s.'
+        return 'Status: Light is %s.</br> Autowatering is %s.</br> Manualwatering is %s.'% (self.light, self.autowater, self.manualwater)
+
+# 環境變數月紀錄
+#class MonthlyWaterRecord(models.Model):
+    # pressure=models.FloatField()
+    # temperature=models.FloatField()
+    # humidity=models.FloatField()
+    # light=models.FloatField()
+    # create_day=models.DateTimeField(auto_now=True)
+# 環境變數年紀錄
+#class YearlyWaterRecord(models.Model):
+    # pressure=models.FloatField()
+    # temperature=models.FloatField()
+    # humidity=models.FloatField()
+    # light=models.FloatField()
+    # create_month=models.DateTimeField(auto_now=True)
+
+#class WeatherReport
+    # pressure=models.FloatField()
+    # temperature=models.FloatField()
+    # humidity=models.FloatField()
+    # light=models.FloatField()
+    # create_day=models.DateTimeField(auto_now=True)
+

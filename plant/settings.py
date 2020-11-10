@@ -133,7 +133,7 @@ STATIC_URL = '/static/'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = 'AKIAJGSFXOXMXDE4ADJA'
-AWS_SECRET_ACCESS_KEY = 'kGPyqBxuJGIgW8HVOcdLf+e87VU7eYLO43A4bnx6'
+AWS_ACCESS_KEY_ID = 'yourid'
+AWS_SECRET_ACCESS_KEY = 'yourkey'
 AWS_SES_REGION_NAME = 'ap-northeast-2' #(ex: us-east-2)
 AWS_SES_REGION_ENDPOINT ='email.ap-northeast-2.amazonaws.com' #(ex: email.us-east-2.amazonaws.com)
