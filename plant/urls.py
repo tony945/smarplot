@@ -16,21 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from gui import views
-from django.contrib.auth import views as auth_views #import this
+from django.contrib.auth import views as auth_views 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='backend'),
     # path('accounts/', include('django.contrib.auth.urls')),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='account/password_reset_confirm.html'), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name="account/password_reset_complete.html"), name='password_reset_complete'),
     path('password_reset/', views.password_reset_request, name='password_reset'),
-    path('index/', views.login),
-    path('login/', views.login),
+    path('index/', views.login, name='login'),
+    path('login/', views.login, name='login'),
     path('login_action/', views.login_action),
-    path('register/', views.register),
+    path('register/', views.register, name='register'),
     path('register_action/', views.register_action),
-    path('realtime_panel/', views.realtime_panel),
-    path('statistics_panel/', views.statistics_panel),
+    path('realtime_panel/', views.realtime_panel, name='home' ),
+    path('realtime_data_refresh/', views.realtime_data_refresh),
+    path('statistics_panel/', views.statistics_panel, name='statistic'),
     path('statistics_panel_shift/', views.statistics_panel_shift),
     path('logout/', views.logout),
 ]
