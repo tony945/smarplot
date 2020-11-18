@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    {%load bootstrap4%}
-    {%bootstrap_css%}
-    {%bootstrap_javascript%}
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
     {% load static %}
     {% load crispy_forms_tags %}
     <link rel="stylesheet" type="text/css" href="{% static 'account_base/style.css' %}">
