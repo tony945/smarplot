@@ -28,6 +28,7 @@ from time import sleep
 
 
 # Global variables for connecting to Sensor
+
 try:
     DEVICE_ADDRESS = 0x23  # Default device I2C address
 
@@ -111,7 +112,7 @@ def register_action(request):
 @login_required
 def realtime_panel(request):
     username = request.session.get("user", '')
-    return render(request, "realtime_panel.html", {"user": username, })
+    return render(request, "panel/realtime_panel.html", {"user": username, })
 
 # 統計資訊頁面
 
@@ -119,7 +120,7 @@ def realtime_panel(request):
 @login_required
 def statistics_panel(request):
     username = request.session.get("user", '')
-    return render(request, "statistics_panel.html", {"user": username, })
+    return render(request, "panel/statistics_panel.html", {"user": username, })
 
 # 統計資料切換頁面
 

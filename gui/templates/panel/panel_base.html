@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    {% block css&js %}
+    {% endblock %}
+</head>
+
+<body role="document" style="background-color: rgb(162, 185, 230); padding-top: 70px;">
+    <!--導覽列-->
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+
+        <!--應用名稱-->
+        <a class="navbar-brand" href="/realtime_panel/" style="font-size: 2em;">植物監測系統</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"
+            aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
+            <ul class="navbar-nav" style="font-size: 2em;">
+                <li id="realtime_panel" class="nav-item" style="margin-right:1.5em;"><a class="nav-link" href="/realtime_panel/">主介面</a></li>
+                <li id="statistics_panel" class="nav-item"><a class="nav-link" href="/statistics_panel/">統計數據</a></li>
+            </ul>
+        </div>
+
+
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+            <ul class="navbar-nav " style="font-size: 1.5em;">
+                <li class="nav-item"><a class="nav-link" href="#">{{user}}</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout/">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+    
+    </div>
+</body>
+</html>

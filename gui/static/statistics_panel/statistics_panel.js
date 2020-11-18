@@ -1,8 +1,15 @@
+// 導覽列
+
+$(function(){$("#statistics_panel").addClass("active");});
+
+
 // Load packages 
+
 google.charts.load('current', { packages: ['corechart', 'line'] });
 google.charts.load('current', { packages: ['corechart', 'scatter'] });
 
 // Set EventListener
+
 google.charts.setOnLoadCallback(() => {
     drawMoistChart();
     drawTempChart();
