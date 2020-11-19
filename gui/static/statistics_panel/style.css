@@ -8,6 +8,13 @@ body {
 
 
 /* STRUCTURE */
+#chartContainer {
+    visibility:hidden
+}
+
+
+
+/* INDIVIDUAL */
 
 .dropdown-menu {
     text-align: center;
@@ -35,4 +42,23 @@ body {
 
 .year {
     display:none;
+}
+
+.loader {
+    border: 32px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 32px solid #3498db;
+    border-bottom: 32px solid #3498db;
+    width: 240px;
+    height: 240px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Animation */
+
+/* Animation for spinning circle */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
