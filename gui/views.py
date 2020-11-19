@@ -51,7 +51,6 @@ def login(request):
 
 # 登錄動作
 
-
 def login_action(request):
     if request.method == 'POST':
         username = request.POST.get('username', '')
@@ -67,13 +66,11 @@ def login_action(request):
 
 # 註冊頁面
 
-
 def register(request):
 
     return render(request, 'account/register.html')
 
 # 註冊動作
-
 
 def register_action(request):
     username = request.POST.get('username', '')
@@ -108,7 +105,6 @@ def register_action(request):
 
 # 實時資訊頁面
 
-
 @login_required
 def realtime_panel(request):
     username = request.session.get("user", '')
@@ -116,14 +112,26 @@ def realtime_panel(request):
 
 # 統計資訊頁面
 
-
 @login_required
 def statistics_panel(request):
     username = request.session.get("user", '')
     return render(request, "panel/statistics_panel.html", {"user": username, })
 
-# 統計資料切換頁面
+# 使用者資料編輯頁面
 
+@login_required
+def user_panel(request):
+    
+    username = request.session.get("user", '')
+    useremail = User.objects.get(username=username).email
+    plantname= ""
+    if not useremail:
+        useremail="empty"
+    if not plantname:
+        plantname="not named yet"
+    return render(request, "panel/user_panel.html", {"user": username, "email": useremail, "plantname": plantname})
+
+# 統計資料切換頁面
 
 @login_required
 def statistics_panel_shift(request):
@@ -139,14 +147,12 @@ def statistics_panel_shift(request):
 
 # 退出登錄
 
-
 @login_required
 def logout(request):
     auth.logout(request)  # 退出登錄
     return HttpResponseRedirect('/login/')
 
 # 處理帳號重設動作
-
 
 def password_reset_request(request):
     if request.method == "POST":
@@ -183,7 +189,6 @@ def password_reset_request(request):
 # 處理及時資訊更新
 # Handler for ajax request
 
-
 @login_required
 def realtime_data_refresh(request):
 
@@ -217,7 +222,6 @@ def realtime_data_refresh(request):
     return HttpResponse(data)
 
 # Read MCP3008 data
-
 
 def analogInput(channel):
     # Start SPI connection
