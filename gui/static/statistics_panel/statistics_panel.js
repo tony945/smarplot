@@ -1,6 +1,6 @@
 // 導覽列
 
-$(function(){$("#statistics_panel").addClass("active");});
+$(function () { $("#statistics_panel").addClass("active"); });
 
 
 // Load packages 
@@ -26,7 +26,7 @@ $(window).resize(function () {
 });
 
 $(function () {
-    $(".dropdown-menu").on("click", ".dropdown-item", function() {
+    $(".dropdown-menu").on("click", ".dropdown-item", function () {
 
         switch (this.id) {
             case 'year':
@@ -42,17 +42,26 @@ $(function () {
 
 
         // sends the timerange chosen from the dropdown list 
-        $.ajax({ type:"GET",url: "/statistics_panel_shift/",data:{'timerange':this.id,}, success: function(result){
-            // drawMoistChart(result[0]);
-            // drawTempChart(result[1]);
-            // drawLightChart(result[2]);
-            // drawPressureChart(result[3]);
-            // drawWateringChart(result[4]);
-            console.log(JSON.stringify(result));
-          }});
+        $.ajax({
+            type: "GET", url: "/statistics_panel_shift/", data: { 'timerange': this.id, }, success: function (result) {
+                // drawMoistChart(result[0]);
+                // drawTempChart(result[1]);
+                // drawLightChart(result[2]);
+                // drawPressureChart(result[3]);
+                // drawWateringChart(result[4]);
+                console.log(JSON.stringify(result));
+            }
+        });
     });
 
 })
+
+// Shuts downloading anime and show chart
+
+window.setTimeout((() => {
+    $("#chartContainer").css("visibility", "visible");
+    $("#spin").css("display", "none");
+}), 500);
 
 
 

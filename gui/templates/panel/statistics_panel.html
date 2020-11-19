@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'statistics_panel/style.css' %}">
 <script src="{% static 'statistics_panel/statistics_panel.js' %}"></script>
 {% endblock %}
-    
+
 {% block content %}
 <!--統計區間下拉式選單-->
 
@@ -27,41 +27,45 @@
         </li>
     </ul>
 </div>
-
+<div class="row justify-content-center pt-5" id="loaderContainer">
+    <div id="spin" class="loader"></div>
+</div>
 <!--統計圖表-->
-<div class="day">
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div1" class="col col-md-6 chartblock"></div>
-        <div id="chart_div2" class="col col-md-6 chartblock"></div>
+<div id="chartContainer">
+    <div class="day">
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div1" class="col col-md-6 chartblock"></div>
+            <div id="chart_div2" class="col col-md-6 chartblock"></div>
+        </div>
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div3" class="col col-md-6 chartblock"></div>
+            <div id="chart_div4" class="col col-md-6 chartblock"></div>
+        </div>
+        <div id="chart_div5" class="chartblock"></div>
     </div>
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div3" class="col col-md-6 chartblock"></div>
-        <div id="chart_div4" class="col col-md-6 chartblock"></div>
-    </div>
-    <div id="chart_div5" class="chartblock"></div>
-</div>
 
-<div class="month">
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div1" class="col col-md-6 chartblock"></div>
-        <div id="chart_div2" class="col col-md-6 chartblock"></div>
+    <div class="month">
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div1" class="col col-md-6 chartblock"></div>
+            <div id="chart_div2" class="col col-md-6 chartblock"></div>
+        </div>
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div3" class="col col-md-6 chartblock"></div>
+            <div id="chart_div4" class="col col-md-6 chartblock"></div>
+        </div>
+        <div id="chart_div5" class="chartblock"></div>
     </div>
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div3" class="col col-md-6 chartblock"></div>
-        <div id="chart_div4" class="col col-md-6 chartblock"></div>
-    </div>
-    <div id="chart_div5" class="chartblock"></div>
-</div>
 
-<div class="year">
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div1" class="col col-md-6 chartblock"></div>
-        <div id="chart_div2" class="col col-md-6 chartblock"></div>
+    <div class="year">
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div1" class="col col-md-6 chartblock"></div>
+            <div id="chart_div2" class="col col-md-6 chartblock"></div>
+        </div>
+        <div class="row ml-auto mr-auto md-lg-5">
+            <div id="chart_div3" class="col col-md-6 chartblock"></div>
+            <div id="chart_div4" class="col col-md-6 chartblock"></div>
+        </div>
+        <div id="chart_div5" class="chartblock"></div>
     </div>
-    <div class="row ml-auto mr-auto md-lg-5">
-        <div id="chart_div3" class="col col-md-6 chartblock"></div>
-        <div id="chart_div4" class="col col-md-6 chartblock"></div>
-    </div>
-    <div id="chart_div5" class="chartblock"></div>
 </div>
 {% endblock %}
