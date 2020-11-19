@@ -22,7 +22,7 @@ function renew_data() {
 }
 // 澆花按鈕
 
-$('#toggle_event_editing button').click(function () {
+$(function() {$('#toggle_event_editing button').click(function () {
     if ($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')) {
         /* code to do when unlocking */
         $('#switch_status').html('開始澆花.');
@@ -39,4 +39,4 @@ $('#toggle_event_editing button').click(function () {
   $('#toggle_event_editing button').eq(0).toggleClass('locked_inactive locked_active btn-default btn-info');
   $('#toggle_event_editing button').eq(1).toggleClass('unlocked_inactive unlocked_active btn-info btn-default');
 });
-
+})
