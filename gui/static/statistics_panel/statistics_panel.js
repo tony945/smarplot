@@ -61,7 +61,7 @@ $(function () {
 window.setTimeout((() => {
     $("#chartContainer").css("visibility", "visible");
     $("#spin").css("display", "none");
-}), 500);
+}), 1000);
 
 
 

@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template import RequestContext
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -78,8 +79,7 @@ def register_action(request):
     email = request.POST.get('email', '')
     try:
         user = User.objects.get(username=username)
-        messages.error(
-            request, "The username is already used. Please change one!")
+        messages.error(request, "The username is already used. Please change one!")
         return render(request, 'account/register.html')
     except User.DoesNotExist:
         User.objects.create_user(username, email, password)
@@ -131,6 +131,31 @@ def user_panel(request):
         plantname="not named yet"
     return render(request, "panel/user_panel.html", {"user": username, "email": useremail, "plantname": plantname})
 
+# 使用者資料編輯頁面-密碼重設
+
+@login_required
+def user_panel_password(request):
+    username = request.session.get("user", '')
+    user = User.objects.get(username=username)
+
+# 使用者資料編輯頁面-信箱重設
+@login_required
+def user_panel_email(request):
+    username = request.session.get("user", '')
+    user = User.objects.get(username=username)
+    # user.email = request.POST.get("email", '')
+    user.email = "tony945tony945@yahoo.com.tw"
+    user.save()
+    return HttpResponseRedirect('/user_panel/')
+# 使用者資料編輯頁面-植物名稱重設
+@login_required
+def user_panel_plantname(request):
+    print("hello")
+
+# 使用者資料編輯頁面-植物重設
+@login_required
+def user_panel_resetplant(request):
+    print("hello")
 # 統計資料切換頁面
 
 @login_required
