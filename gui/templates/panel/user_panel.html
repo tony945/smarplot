@@ -4,6 +4,10 @@
 {% block title %}使用者資料{% endblock %}
 {% load static %}
 
+{% block css&js %}
+<script src="{% static 'user_panel/user_panel.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 
 <div style="text-align:center; padding-top:5em;">
@@ -13,7 +17,9 @@
     <table id="userForm" class="table table-hover table-striped col-10" style="text-align: center;">
         <tr>
             <th>Name</th>
-            <td><h4>{{ user }}</h4></td>
+            <td>
+                <h4>{{ user }}</h4>
+            </td>
             <td></td>
         </tr>
         <tr>
@@ -24,13 +30,17 @@
         </tr>
         <tr>
             <th>Email</th>
-            <td><h4>{{ email }}</h4></td>
+            <td>
+                <h4>{{ email }}</h4>
+            </td>
             <td><button type="button" class="btn btn-secondary btn-sm" name="emailReset" data-toggle="modal"
                     data-target="#emailModal">Change</button></td>
         </tr>
         <tr>
             <th>Plant</th>
-            <td><h4>{{ plantname }}</h4></td>
+            <td>
+                <h4>{{ plantname }}</h4>
+            </td>
             <td><button type="button" class="btn btn-secondary btn-sm" name="plantnameReset" data-toggle="modal"
                     data-target="#plantnameModal">Change</button></td>
         </tr>
@@ -55,6 +65,7 @@
             </div>
             <div class="modal-body">
                 <form>
+                    {% csrf_token %}
                     <div class="form-group row">
                         <label for="oldPassword" class="col-form-label">Your old password:</label>
                         <input type="password" class="form-control" id="oldPassword">
@@ -71,7 +82,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnPassword" class="btn btn-primary">Save changes</button>
             </div>
         </div>
 
@@ -89,14 +100,17 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="newEmail" class="col-form-label">Your new email:</label>
-                    <input type="email" class="form-control" id="newEmail">
-                </div>
+                <form>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="newEmail" class="col-form-label">Your new email:</label>
+                        <input type="email" class="form-control" id="newEmail">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnEmail" class="btn btn-primary">Save changes</button>
             </div>
         </div>
 
@@ -114,12 +128,17 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <label for="newPlantname" class="col-form-label">Your plant's new name:</label>
-                <input type="email" class="form-control" id="newPlantname">
+                <form>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="newPlantname" class="col-form-label">Your plant's new name:</label>
+                        <input type="text" class="form-control" id="newPlantname">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="btnPlantname" class="btn btn-primary">Save changes</button>
             </div>
         </div>
 
@@ -138,14 +157,15 @@
             </div>
             <div class="modal-body">
                 <p>
-                    <h4>After confirm, the data of previous plant will be unaccessible, are you sure?</h4>
+                <h4>After confirm, the data of previous plant will be unaccessible, are you sure?</h4>
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Confirm</button>
+                <button type="button" id="btnPlantReset" class="btn btn-primary">Confirm</button>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
