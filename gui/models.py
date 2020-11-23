@@ -1,34 +1,63 @@
 from django.db import models
-from django.contrib.auth.models import User                     
+from django.contrib.auth.models import User  
+
 # Create your models here.
 
 # 植物資料
 class Plant(models.Model):
+    pid=models.AutoField(primary_key=True)
     plant_name=models.CharField(max_length=20)
+    active=models.BooleanField()
     create_time=models.DateTimeField(auto_now=True)
+    
 
     @classmethod
     def __str__(self):
-        return self.plant_name
+        return self.pid
  
-# 環境變數
+# 環境紀錄
 class SensorRecord(models.Model):
     plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
-    pressure=models.FloatField()
     temperature=models.FloatField()
+    air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
     create_time=models.DateTimeField(auto_now=True)
 
     @classmethod
     def __str__(self):
-        return 'Temperature %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.light, self.soil)
+        return 'Temperature %s.</br> Air Humidity %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.air , self.light, self.soil)
+
+# 日平均環境紀錄
+class DailySensorRecord(models.Model):
+    plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
+    temperature=models.FloatField()
+    air=models.FloatField()
+    soil=models.FloatField()
+    light=models.FloatField()
+    create_time=models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def __str__(self):
+        return 'Temperature %s.</br> Air Humidity %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.air , self.light, self.soil)
+
+# 月平均環境紀錄
+class MonthlySensorRecord(models.Model):
+    plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
+    temperature=models.FloatField()
+    air=models.FloatField()
+    soil=models.FloatField()
+    light=models.FloatField()
+    create_time=models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def __str__(self):
+        return 'Temperature %s.</br> Air Humidity %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.air , self.light, self.soil)
 
 # 澆花紀錄
 class WaterRecord(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
-    manual=models.BooleanField(default=0)
     create_time=models.DateTimeField(auto_now=True)
     create_user=models.IntegerField()
 
@@ -39,9 +68,11 @@ class WaterRecord(models.Model):
 # 操作紀錄
 class OperationRecord(models.Model):
     EVENT_TYPES = (
-        ('L', 'Light'),
-        ('A', 'Auto_Watering'),
-        ('M', 'Manual_Watering'),
+        ('L', "Light"),
+        ('A', "Auto_Watering"),
+        ('M', "Manual_Watering"),
+        ('N', "New_Plantname"),
+        ('R', "Reset_PlantData")
     )
 
     EVENT_ACTIONS=(
@@ -58,7 +89,7 @@ class OperationRecord(models.Model):
 
     @classmethod
     def __str__(self):
-        return self.action
+        return self.event
 # 盆栽狀態
 class PotStatus(models.Model):
     light=models.BooleanField(default=0)
@@ -69,25 +100,18 @@ class PotStatus(models.Model):
     def current_pot_status(self):
         return 'Status: Light is %s.</br> Autowatering is %s.</br> Manualwatering is %s.'% (self.light, self.autowater, self.manualwater)
 
-# 環境變數月紀錄
-#class MonthlyWaterRecord(models.Model):
-    # pressure=models.FloatField()
-    # temperature=models.FloatField()
-    # humidity=models.FloatField()
-    # light=models.FloatField()
-    # create_day=models.DateTimeField(auto_now=True)
-# 環境變數年紀錄
-#class YearlyWaterRecord(models.Model):
-    # pressure=models.FloatField()
-    # temperature=models.FloatField()
-    # humidity=models.FloatField()
-    # light=models.FloatField()
-    # create_month=models.DateTimeField(auto_now=True)
+# 評分紀錄
+class Scoring(models.Model):
 
-#class WeatherReport
-    # pressure=models.FloatField()
-    # temperature=models.FloatField()
-    # humidity=models.FloatField()
-    # light=models.FloatField()
-    # create_day=models.DateTimeField(auto_now=True)
+    SCORE_TYPES=(
+        ('1', "One"),
+        ('2', "Two"),
+        ('3', "Three"),
+        ('4', "Four"),
+        ('5', "Five"),
+    )
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
+    score=models.IntegerField(choices=SCORE_TYPES)
+    create_time=models.DateTimeField(auto_now=True)
 
