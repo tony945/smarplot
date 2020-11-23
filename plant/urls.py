@@ -29,6 +29,8 @@ urlpatterns = [
     path('login_action/', views.login_action),
     path('register/', views.register, name='register'),
     path('register_action/', views.register_action),
+    path('register_plant/', views.register_plant),
+    path('register_plant/action/', views.register_plant_action),
     path('user_panel/', views.user_panel),
     path('user_panel/password/', views.user_panel_password),
     path('user_panel/email/', views.user_panel_email),

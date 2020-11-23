@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Plant(models.Model):
     pid=models.AutoField(primary_key=True)
     plant_name=models.CharField(max_length=20)
-    active=models.BooleanField()
+    active=models.BooleanField(default=True)
     create_time=models.DateTimeField(auto_now=True)
     
 

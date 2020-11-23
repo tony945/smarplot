@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊植物資料</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {%load bootstrap4%}
+    {%bootstrap_css%}
+    {%bootstrap_javascript%}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'register_plant/style.css' %}">
+</head>
+
+<body style="background-color: rgb(162, 185, 230);">
+    <div class="wrapper fadeInLeft">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <h2>SmartPot</h2>
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <img src="{% static 'account_base/plant.svg' %}" id="icon" alt="Plot Icon" />
+            </div>
+
+            <!-- Login Form -->
+            <form method="POST" action="/register_plant/action/">
+                {% csrf_token %}
+                <input class="fadeIn second" name="plantname" type="text" placeholder=" Register plantname"><br>
+
+                <button id="btn" class="fadeIn third" type="submit">註冊</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

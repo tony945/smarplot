@@ -1,0 +1,4 @@
+/* Hide message block before showing */
+.alert {
+    visibility: hidden;
+}
