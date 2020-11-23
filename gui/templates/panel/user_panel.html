@@ -5,6 +5,7 @@
 {% load static %}
 
 {% block css&js %}
+<link rel="stylesheet" type="text/css" href="{% static 'user_panel/style.css' %}">
 <script src="{% static 'user_panel/user_panel.js' %}"></script>
 {% endblock %}
 
@@ -64,21 +65,23 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="passwordForm">
                     {% csrf_token %}
                     <div class="form-group row">
                         <label for="oldPassword" class="col-form-label">Your old password:</label>
-                        <input type="password" class="form-control" id="oldPassword">
+                        <input type="password" class="form-control" name="oldPassword">
                     </div>
                     <div class="form-group row">
                         <label for="newPassword" class="col-form-label">Your new password:</label>
-                        <input type="password" class="form-control" id="newPassword">
+                        <input type="password" class="form-control" name="newPassword">
                     </div>
                     <div class="form-group row">
                         <label for="confirmPassword" class="col-form-label">Reconfirm new password:</label>
-                        <input type="password" class="form-control" id="confirmPassword">
+                        <input type="password" class="form-control" name="confirmPassword">
                     </div>
                 </form>
+                <div class="alert alert-danger" role="alert">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -100,13 +103,15 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="emailForm">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="newEmail" class="col-form-label">Your new email:</label>
-                        <input type="email" class="form-control" id="newEmail">
+                        <input type="email" class="form-control" name="newEmail">
                     </div>
                 </form>
+                <div class="alert alert-danger" role="alert">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -128,11 +133,11 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="plantnameForm">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="newPlantname" class="col-form-label">Your plant's new name:</label>
-                        <input type="text" class="form-control" id="newPlantname">
+                        <input type="text" class="form-control" name="newPlantname">
                     </div>
                 </form>
             </div>

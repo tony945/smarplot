@@ -5,6 +5,8 @@ from django.template import RequestContext
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
+from gui.models import Plant
 
 # packages for sending verification email
 from django.core.mail import send_mail, BadHeaderError
@@ -60,7 +62,10 @@ def login_action(request):
         if user is not None:
             auth.login(request, user)  # 登錄
             request.session['user'] = username   # 將session資訊記錄到瀏覽器
-            return HttpResponseRedirect('/realtime_panel/')
+            if Plant.objects.filter(active="1"):
+                return HttpResponseRedirect('/realtime_panel/')
+            else:
+                return HttpResponseRedirect('/register_plant/')
         else:
             messages.error(request, "Username or password error!")
             return render(request, 'login.html')
@@ -124,12 +129,36 @@ def user_panel(request):
     
     username = request.session.get("user", '')
     useremail = User.objects.get(username=username).email
-    plantname= ""
+
     if not useremail:
         useremail="empty"
-    if not plantname:
+
+    try:
+        plantname = Plant.objects.get(active="1").plant_name
+    except:
         plantname="not named yet"
+
+
     return render(request, "panel/user_panel.html", {"user": username, "email": useremail, "plantname": plantname})
+
+# 植物註冊頁面
+
+@login_required
+def register_plant(request):
+    if Plant.objects.filter(active="1"):
+        return HttpResponseRedirect('/realtime_panel/')
+
+    return render(request, "register_plant.html")
+
+# 植物註冊處理
+
+@login_required
+def register_plant_action(request):
+    plantname =request.POST.get("plantname", '')
+    plant = Plant.objects.create(plant_name=plantname)
+    return HttpResponseRedirect('/realtime_panel/')
+    
+
 
 # 使用者資料編輯頁面-密碼重設
 
@@ -137,25 +166,59 @@ def user_panel(request):
 def user_panel_password(request):
     username = request.session.get("user", '')
     user = User.objects.get(username=username)
+    oldPassword = request.POST.get("oldPassword", '')
+    print(oldPassword)
+    newPassword = request.POST.get("newPassword", '')
+    confirmNewPassword = request.POST.get("confirmPassword", '')
+  
+    if user.check_password(oldPassword):
+        if newPassword == confirmNewPassword:
+            user.set_password(newPassword)
+            user.save()
+            update_session_auth_hash(request, user) # Updates user session to prevent from logging out
+            return HttpResponse(0)
+        else:
+            return HttpResponse(2)
+    else:
+        return HttpResponse(1)
 
 # 使用者資料編輯頁面-信箱重設
+
 @login_required
 def user_panel_email(request):
-    username = request.session.get("user", '')
-    user = User.objects.get(username=username)
-    # user.email = request.POST.get("email", '')
-    user.email = "tony945tony945@yahoo.com.tw"
-    user.save()
-    return HttpResponseRedirect('/user_panel/')
+    newEmail = request.POST.get("newEmail", '')
+    if User.objects.filter(email=newEmail):
+        return HttpResponse(0)
+    else:
+        username = request.session.get("user", '')
+        user = User.objects.get(username=username)
+        user.email = newEmail
+        user.save()
+        return HttpResponse(1)
+
 # 使用者資料編輯頁面-植物名稱重設
+
 @login_required
 def user_panel_plantname(request):
-    print("hello")
+    plantname=request.POST.get("newPlantname", '')
+    try:
+        plant = Plant.objects.get(active="1")
+        plant.plant_name = plantname
+        plant.save()
+    except:   
+        plant = Plant.objects.create(plant_name=plantname)
 
+    return HttpResponse()
+    
 # 使用者資料編輯頁面-植物重設
+
 @login_required
 def user_panel_resetplant(request):
-    print("hello")
+    plant=Plant.objects.get(active="1")
+    plant.active="0"
+    plant.save()
+    return HttpResponse()
+
 # 統計資料切換頁面
 
 @login_required
