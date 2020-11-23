@@ -5,48 +5,20 @@ from django.contrib.auth.models import User
 # 植物資料
 class Plant(models.Model):
     plant_name=models.CharField(max_length=20)
-    plant_type=models.CharField(max_length=20)
-    active=models.BooleanField()
     create_time=models.DateTimeField(auto_now=True)
-     
+
     @classmethod
     def __str__(self):
         return self.plant_name
  
-# 環境資料
+# 環境變數
 class SensorRecord(models.Model):
     plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
+    pressure=models.FloatField()
     temperature=models.FloatField()
-    air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
-    record_time=models.DateTimeField(auto_now=True)
-
-    @classmethod
-    def __str__(self):
-        return 'Temperature %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.light, self.soil)
-
-# 每月日平均環境資料
-class DailySensorRecord(models.Model):
-    plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
-    temperature=models.FloatField()
-    =models.FloatField()
-    soil=models.FloatField()
-    light=models.FloatField()
-    record_time=models.DateTimeField(auto_now=True)
-
-    @classmethod
-    def __str__(self):
-        return 'Temperature %s.</br> Solar Radiation %s.</br> Soil Moisture %s.'% (self.temperature, self.light, self.soil)
-
-# 每年月平均環境資料
-class MonthlySensorRecord(models.Model):
-    plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
-    temperature=models.FloatField()
-    =models.FloatField()
-    soil=models.FloatField()
-    light=models.FloatField()
-    record_time=models.DateTimeField(auto_now=True)
+    create_time=models.DateTimeField(auto_now=True)
 
     @classmethod
     def __str__(self):
