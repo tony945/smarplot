@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import json
+from gui.models import Plant, Scoring, PotStatus
+from django.contrib.auth.models import User
+from datetime import date
 
 # packages for aquiring data from sensor
 import os
@@ -13,8 +16,6 @@ import sys
 #import RPi.GPIO as GPIO
 from numpy import interp  # To scale values. Mapping value range of 0~1023 to 0~100
 from time import sleep
-
-
 
 
 # Global variables for connecting to Sensor
@@ -33,14 +34,85 @@ try:
 except :
     print("sensor error")
 
+
 # 實時資訊頁面
 
 @login_required
 def realtime_panel(request):
     username = request.session.get("user", '')
-    return render(request, "panel/realtime_panel.html", {"user": username, })
+
+    today = date.today()
+    formatToday = today.strftime("%Y-%m-%d")
+
+    # Check for status of scoring
+    if Scoring.objects.filter(create_time=formatToday):
+        score = Scoring.objects.get(create_time=formatToday).score
+    else:
+        score = "0"
+        
+    # Check for status of switch
+    potstatus = PotStatus.objects.get(id=1)
+    lightStatus = potstatus.light
+    autowaterStatus = potstatus.autowater
+    manualwaterStatus = potstatus.manualwater
+
+    return render(request, "panel/realtime_panel.html", {"user": username, "score": score, "light":lightStatus, "manual":manualwaterStatus, "auto": autowaterStatus})
 
 
+# 處理評分
+
+@login_required
+def scoring(request):
+    score = request.POST.get("scoring", '')
+    username = request.session.get("user", '')
+    user = User.objects.get(username=username)
+    plant = Plant.objects.get(active="1")
+    
+    today = date.today()
+    formatToday= today.strftime("%Y-%m-%d")
+    if Scoring.objects.filter(create_time=formatToday):
+        scoreObj = Scoring.objects.get(create_time=formatToday)
+        scoreObj.score = score
+        scoreObj.save()
+    else:
+        submitScore = Scoring.objects.create(user=user,plant=plant,score=score,)
+        submitScore.save()
+
+    return HttpResponse()
+
+
+# 自動澆花按鈕行為
+
+@login_required
+def autowater(request):
+    status = request.POST.get("status", '')
+    potstatus = PotStatus.objects.get(id=1)
+    potstatus.autowater = status
+    potstatus.save()
+
+    return HttpResponse() 
+
+
+# 光源開關
+
+def light(request):
+    status = request.POST.get("status", '')
+    potstatus = PotStatus.objects.get(id=1)
+    potstatus.light = status
+    potstatus.save()
+
+    return HttpResponse()  
+
+
+# 手動澆花按鈕行為
+
+def manualwater(request):
+    status = request.POST.get("status", '')
+    potstatus = PotStatus.objects.get(id=1)
+    potstatus.manualwater = status
+    potstatus.save()
+
+    return HttpResponse() 
 
 # 處理及時資訊更新
 # Handler for ajax request
@@ -62,23 +134,26 @@ def realtime_data_refresh(request):
 
     # Aquire data from sensor
     try:
-        soil_moisture = readMoist()
+        soilMoisture = readMoist()
         light = readLight()
         temp = readTemp() 
     except:
-        soil_moisture = "0"
+        soilMoisture = "0"
         light = "0"
         temp = "0"
+        airHumidity = "0"
 
 
     # Pack the data into dict, then dump into json
-    data = {'light': light, 'temp': temp, 'soil': soil_moisture}
+    data = {'light': light, 'temp': temp, 'soil': soilMoisture, 'air': airHumidity}
     data = json.dumps(data)
 
     return HttpResponse(data)
 
-# Read MCP3008 data
 
+# Below are the functions used to handle reading from sensor
+
+# Read MCP3008 data
 def analogInput(channel):
     # Start SPI connection
     spi = spidev.SpiDev()  # Created an object
@@ -88,13 +163,11 @@ def analogInput(channel):
     data = ((adc[1] & 3) << 8) + adc[2]
     return data
 
-
 def readRawTemp():
     f = open(DEVICE_FILE, 'r')
     lines = f.readlines()
     f.close()
     return lines
-
 
 def readTemp():
     lines = readRawTemp()
@@ -110,15 +183,12 @@ def readTemp():
 
     return round(temp_c, 1)
 
-
 def convertToNumber(data):
     return ((data[1] + (256 * data[0])) / 1.2)
-
 
 def readLight(addr=DEVICE_ADDRESS):
     data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
     return round(convertToNumber(data), 1)
-
 
 def readMoist():
     data = analogInput(0)  # Reading from CH0
