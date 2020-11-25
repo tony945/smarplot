@@ -64,7 +64,6 @@ window.setTimeout((() => {
 }), 1000);
 
 
-
 // Handles transfer of dropbox title
 
 // Chart of Moisture
@@ -264,9 +263,9 @@ function drawWateringChart(input = []) {
     }
     else {
         record = [
-            [5, 1], [10, 1],
-            [51, 1], [63, 1],
-            [69, 1]
+            [10, 1], [13, 1],
+            [25, 1], [40, 1],
+            [56, 1]
         ];
     }
 
