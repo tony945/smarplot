@@ -45,8 +45,11 @@ def realtime_panel(request):
     formatToday = today.strftime("%Y-%m-%d")
 
     # Check for status of scoring
-    if Scoring.objects.filter(create_time=formatToday):
-        score = Scoring.objects.get(create_time=formatToday).score
+    currentPlantID = Plant.objects.get(active=1).pid
+    scoreObj = Scoring.objects.filter(plant_id=currentPlantID).filter(create_time=formatToday)
+
+    if scoreObj:
+        score = scoreObj[0].score
     else:
         score = "0"
         
@@ -70,13 +73,12 @@ def scoring(request):
     
     today = date.today()
     formatToday= today.strftime("%Y-%m-%d")
-    if Scoring.objects.filter(create_time=formatToday):
-        scoreObj = Scoring.objects.get(create_time=formatToday)
-        scoreObj.score = score
-        scoreObj.save()
+    # If this plant has yet have any scoring record today, create one
+    scoreObj = Scoring.objects.filter(plant_id=plant.pid).filter(create_time=formatToday)
+    if scoreObj:
+        scoreObj.update(score = score)
     else:
         submitScore = Scoring.objects.create(user=user,plant=plant,score=score,)
-        submitScore.save()
 
     return HttpResponse()
 

@@ -115,3 +115,7 @@ class Scoring(models.Model):
     score=models.IntegerField(choices=SCORE_TYPES)
     create_time=models.DateField(auto_now=True)
 
+    @classmethod
+    def __str__(self):
+        return str(self.score)
+
