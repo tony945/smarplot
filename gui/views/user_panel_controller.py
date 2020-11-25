@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from gui.models import Plant
+from gui.models import Plant, PotStatus
 
 
 # 使用者資料編輯頁面
@@ -93,6 +93,7 @@ def user_panel_resetplant(request):
 
 @login_required
 def register_plant(request):
+    # Prevent direct access this page with url when a plant is active
     if Plant.objects.filter(active="1"):
         return HttpResponseRedirect('/realtime_panel/')
 
@@ -105,4 +106,8 @@ def register_plant(request):
 def register_plant_action(request):
     plantname =request.POST.get("plantname", '')
     plant = Plant.objects.create(plant_name=plantname)
+    # If the pot is yet registered, register it in db
+    if not PotStatus.objects.all():
+        PotStatus.objects.create(autowater=0, light=0, manualwater=0)
+
     return HttpResponseRedirect('/realtime_panel/')

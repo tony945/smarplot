@@ -35,7 +35,7 @@ class DailySensorRecord(models.Model):
     air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
-    create_time=models.DateTimeField(auto_now=True)
+    create_time=models.DateField(auto_now=True)
 
     @classmethod
     def __str__(self):
@@ -48,7 +48,7 @@ class MonthlySensorRecord(models.Model):
     air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
-    create_time=models.DateTimeField(auto_now=True)
+    create_time=models.DateField(auto_now=True)
 
     @classmethod
     def __str__(self):
@@ -113,5 +113,5 @@ class Scoring(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     plant=models.ForeignKey(Plant,on_delete=models.CASCADE)
     score=models.IntegerField(choices=SCORE_TYPES)
-    create_time=models.DateTimeField(auto_now=True)
+    create_time=models.DateField(auto_now=True)
 

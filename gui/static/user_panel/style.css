@@ -2,3 +2,8 @@
 .alert {
     visibility: hidden;
 }
+
+
+h4 {
+    font-size: 3vw;
+}
