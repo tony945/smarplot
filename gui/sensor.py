@@ -39,17 +39,19 @@ DEVICE = 0x23  # Default device I2C address
 ONE_TIME_HIGH_RES_MODE_1 = 0x20
 ONE_TIME_HIGH_RES_MODE_2 = 0x21
 
-bus = smbus.SMBus(1)  # Rev 2 Pi uses 1
-sleep(1)
+I2C = smbus.SMBus(1)  # Rev 2 Pi uses 1
+
+
 
 # Read MCP3008 data
-
 
 def analogInput(channel):
     spi.max_speed_hz = 1350000
     adc = spi.xfer2([1, (8+channel) << 4, 0])
     data = ((adc[1] & 3) << 8) + adc[2]
+
     return data
+
 
 def readMoist():
     output = analogInput(0)  # Reading from CH0
@@ -58,10 +60,12 @@ def readMoist():
 
     return output
 
+
 def read_temp_raw():
     f = open(device_file, 'r')
     lines = f.readlines()
     f.close()
+
     return lines
 
 
@@ -74,24 +78,26 @@ def read_temp():
     equals_pos = lines[1].find('t=')
 
     if equals_pos != -1:
-
         temp_string = lines[1][equals_pos+2:]
         temp_c = float(temp_string)/1000.0
 
-        return round(temp_c, 0)
+        return round(temp_c, 1)
 
 
 def convertToNumber(data):
+
     return ((data[1] + (256 * data[0])) / 1.2)
 
 
 def readLight(addr=DEVICE):
-    data = bus.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
+    data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
+
     return round(convertToNumber(data), 3)
 
 
 def readHumidity():
     humidity = dhtDevice.humidity
+
     return humidity
 
 
@@ -124,9 +130,9 @@ if __name__ == '__main__':
     date_time = now.strftime("%Y-%m-%d,%H:%M:%S")
 
     try:
-        cur.execute("select plant_id from gui_sensorrecord where active = 1")
+        cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,)")
         plant_id = cur.fetchall()
-        cur.execute("insert into gui_sensorrecord(soil,temperature,air,light,create_time,plant_id) value(?,?,?,?,?,?)",
+        cur.execute("INSERT INTO gui_sensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
                 (soil, temp, humidity, air, date_time, plant_id[0][0]))
     except mariadb.Error as e:
         print(e)

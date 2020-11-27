@@ -218,7 +218,7 @@ def convertToNumber(data):
 def readLight():
     addr=DEVICE_ADDRESS
     data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
-    return round(convertToNumber(data), 1)
+    return round(convertToNumber(data), 0)
 
 def readMoist():
     data = analogInput(0)  # Reading from CH0
