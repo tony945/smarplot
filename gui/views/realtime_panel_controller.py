@@ -22,23 +22,55 @@ try:
 except:
     print("Module missing for connecting to sensor")
 
-# Global variables for connecting to Sensor
 
-
-
+# Temporarily fix of the bug of adafruit_dht
 try:
     os.system('pkill libgpiod')
+    # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
+    #GPIO.setmode(GPIO.BOARD)
+
+    # Execute linux command: Add and remove modules from linux kernal : 1-wire bus master driver
+    #
+    # w1-gpio: GPIO 1-wire bus master driver.
+    # The driver uses the GPIO API to control the wire and the GPIO pin can be specified using GPIO machine descriptor tables
+    #
+    # w1_therm: provides basic temperature conversion for ds18*20 devices, and the ds28ea00 device.
+    os.system('modprobe w1-gpio')
+    os.system('modprobe w1-therm')
+except:
+    print("Please deploy this on a Raspberry pi")
+
+
+# Global variables for connecting to Sensor
+
+try:
+    # DHT11 sensor
     dhtDevice = adafruit_dht.DHT11(board.D17)
-
-
-
+except:
+    print("DHT sensor error")
+try:
+    # Light sensor
+    DEVICE_ADDRESS = 0x23  # Default device I2C address
+    ONE_TIME_HIGH_RES_MODE_1 = 0x20
+    ONE_TIME_HIGH_RES_MODE_2 = 0x21
     I2C = smbus.SMBus(1)  # 指定使用/dev/i2c-1
-
+except:
+    print("Light sensor error")
+try:
+    # Temperature sensor
     BASE_DIR = '/sys/bus/w1/devices/'
     DEVICE_FOLDER = glob.glob(BASE_DIR + '28*')[0]
     DEVICE_FILE = DEVICE_FOLDER + '/w1_slave'
-except :
-    print("Sensor error")
+except:
+    print("Temperture sensor error")
+try:
+    # Humidity sensor
+    # Start SPI connection
+    spi = spidev.SpiDev()  # Created an object
+    spi.open(0, 0)
+    spi.max_speed_hz = 1350000
+except:
+    print("Moisture sensor error")
 
 
 # 實時資訊頁面
@@ -127,19 +159,6 @@ def manualwater(request):
 
 @login_required
 def realtime_data_refresh(request):
-
-    # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
-    #GPIO.setmode(GPIO.BOARD)
-
-    # Execute linux command: Add and remove modules from linux kernal : 1-wire bus master driver
-    #
-    # w1-gpio: GPIO 1-wire bus master driver.
-    # The driver uses the GPIO API to control the wire and the GPIO pin can be specified using GPIO machine descriptor tables
-    #
-    # w1_therm: provides basic temperature conversion for ds18*20 devices, and the ds28ea00 device.
-    #os.system('modprobe w1-gpio')
-    #os.system('modprobe w1-therm')
-
     # Aquire data from sensor
     try:
         soilMoisture = readMoist()
@@ -169,10 +188,6 @@ def realtime_data_refresh(request):
 
 # Read MCP3008 data
 def analogInput(channel):
-    # Start SPI connection
-    spi = spidev.SpiDev()  # Created an object
-    spi.open(0, 0)
-    spi.max_speed_hz = 1350000
     adc = spi.xfer2([1, (8+channel) << 4, 0])
     data = ((adc[1] & 3) << 8) + adc[2]
     return data
