@@ -24,11 +24,13 @@ except:
 
 # Global variables for connecting to Sensor
 
-try:
-    DEVICE_ADDRESS = 0x23  # Default device I2C address
 
-    ONE_TIME_HIGH_RES_MODE_1 = 0x20
-    ONE_TIME_HIGH_RES_MODE_2 = 0x21
+
+try:
+    os.system('pkill libgpiod')
+    dhtDevice = adafruit_dht.DHT11(board.D17)
+
+
 
     I2C = smbus.SMBus(1)  # 指定使用/dev/i2c-1
 
@@ -198,7 +200,8 @@ def readTemp():
 def convertToNumber(data):
     return ((data[1] + (256 * data[0])) / 1.2)
 
-def readLight(addr=DEVICE_ADDRESS):
+def readLight():
+    addr=DEVICE_ADDRESS
     data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
     return round(convertToNumber(data), 1)
 
@@ -208,7 +211,6 @@ def readMoist():
     return int(data)
 
 def readHumidity():
-
-    data = dhtDevice.airHumidity
+    data = dhtDevice.humidity
     return data
 
