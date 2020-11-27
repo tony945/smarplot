@@ -7,16 +7,20 @@ from django.contrib.auth.models import User
 from datetime import date
 
 # packages for aquiring data from sensor
-import os
-import glob
-import time
-#import spidev  # To communicate with SPI devices
-#import smbus
-import sys
-#import RPi.GPIO as GPIO
-from numpy import interp  # To scale values. Mapping value range of 0~1023 to 0~100
-from time import sleep
-
+try:
+    import os
+    import glob
+    import time
+    import spidev  # To communicate with SPI devices
+    import smbus
+    import sys
+    import RPi.GPIO as GPIO
+    from numpy import interp  # To scale values. Mapping value range of 0~1023 to 0~100
+    from time import sleep
+    import adafruit_dht
+    import board
+except:
+    print("Module missing for connecting to sensor")
 
 # Global variables for connecting to Sensor
 
@@ -32,7 +36,7 @@ try:
     DEVICE_FOLDER = glob.glob(BASE_DIR + '28*')[0]
     DEVICE_FILE = DEVICE_FOLDER + '/w1_slave'
 except :
-    print("sensor error")
+    print("Sensor error")
 
 
 # 實時資訊頁面
@@ -137,14 +141,20 @@ def realtime_data_refresh(request):
     # Aquire data from sensor
     try:
         soilMoisture = readMoist()
-        light = readLight()
-        temp = readTemp() 
     except:
         soilMoisture = "0"
+    try:
+        light = readLight()
+    except:
         light = "0"
+    try:
+        temp = readTemp()
+    except:
         temp = "0"
+    try:
+        airHumidity = readHumidity()
+    except:
         airHumidity = "0"
-
 
     # Pack the data into dict, then dump into json
     data = {'light': light, 'temp': temp, 'soil': soilMoisture, 'air': airHumidity}
@@ -196,4 +206,9 @@ def readMoist():
     data = analogInput(0)  # Reading from CH0
     data = interp(data, [0, 1023], [100, 0])
     return int(data)
+
+def readHumidity():
+
+    data = dhtDevice.airHumidity
+    return data
 
