@@ -92,7 +92,7 @@ def convertToNumber(data):
 def readLight(addr=DEVICE):
     data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
 
-    return round(convertToNumber(data), 3)
+    return round(convertToNumber(data), 0)
 
 
 def readHumidity():
@@ -121,6 +121,12 @@ if __name__ == '__main__':
         air = readHumidity()
     except:
         air = 0
+    if air == 0:
+        sleep(2)
+        try:
+            air = readHumidity()
+        except:
+            air = 0
     try:
         temp = read_temp()
     except:
@@ -130,10 +136,10 @@ if __name__ == '__main__':
     date_time = now.strftime("%Y-%m-%d,%H:%M:%S")
 
     try:
-        cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,)")
+        cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
         plant_id = cur.fetchall()
         cur.execute("INSERT INTO gui_sensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
-                (soil, temp, humidity, air, date_time, plant_id[0][0]))
+                (soil, temp, air, light, date_time, plant_id[0][0]))
     except mariadb.Error as e:
         print(e)
 
