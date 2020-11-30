@@ -133,13 +133,14 @@ if __name__ == '__main__':
         temp = 0
 
     now = datetime.now()
-    date_time = now.strftime("%Y-%m-%d,%H:%M:%S")
+    dateTime = now.strftime("%Y-%m-%d,%H:%M:%S")
 
     try:
         cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
-        plant_id = cur.fetchall()
+        plantIds = cur.fetchall()
+        plantId = plantIds[0][0]
         cur.execute("INSERT INTO gui_sensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
-                (soil, temp, air, light, date_time, plant_id[0][0]))
+                (soil, temp, air, light, dateTime, plantId))
     except mariadb.Error as e:
         print(e)
 
