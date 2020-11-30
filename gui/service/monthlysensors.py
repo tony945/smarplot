@@ -17,14 +17,14 @@ if __name__ == '__main__':
         today = date.today()
         formatMonth= today.strftime("%Y-%m") # Get the current month
         
-        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE '?%' ",(plantId,"{}%".format(formatToday)))
+        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatMonth)))
         monthlySensorRecord = cur.fetchall()
         averageSoil = monthlySensorRecord[0][0]
         averageTemp = monthlySensorRecord[0][1]
-        averageAir = monthlysensorRecord[0][2]
+        averageAir = monthlySensorRecord[0][2]
         averageLight = monthlySensorRecord[0][3]
 
-        cur.execute("INSERT INTO gui_dailysensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
+        cur.execute("INSERT INTO gui_monthlysensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
                 (round(averageSoil,0), round(averageTemp,1), round(averageAir,0), round(averageLight,0), formatMonth, plantId))
     except mariadb.Error as e:
         print(e)
