@@ -17,7 +17,7 @@ if __name__ == '__main__':
         today = date.today()
         formatToday= today.strftime("%Y-%m-%d")
         
-        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE '?%' ",(plantId,"{}%".format(formatToday)))
+        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatToday)))
         dailySensorRecord = cur.fetchall()
         averageSoil = dailySensorRecord[0][0]
         averageTemp = dailySensorRecord[0][1]

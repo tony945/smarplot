@@ -35,7 +35,7 @@ class DailySensorRecord(models.Model):
     air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
-    create_time=models.DateField(auto_now=True)
+    create_time=models.DateField()
 
     @classmethod
     def __str__(self):
@@ -48,7 +48,7 @@ class MonthlySensorRecord(models.Model):
     air=models.FloatField()
     soil=models.FloatField()
     light=models.FloatField()
-    create_time=models.DateField(auto_now=True)
+    create_time=models.CharField(max_length=10)
 
     @classmethod
     def __str__(self):
