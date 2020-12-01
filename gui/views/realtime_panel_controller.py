@@ -26,6 +26,10 @@ except:
 # Temporarily fix of the bug of adafruit_dht
 try:
     os.system('pkill libgpiod')
+    GPIO.setup(13,GPIO.OUT)
+    GPIO.setup(19,GPIO.OUT)
+    GPIO.setup(26,GPIO.OUT)
+    GPIO.setwarnings(False)
     # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
     #GPIO.setmode(GPIO.BOARD)
 
@@ -71,6 +75,8 @@ try:
     spi.max_speed_hz = 1350000
 except:
     print("Moisture sensor error")
+
+
 
 
 # 實時資訊頁面
@@ -126,6 +132,10 @@ def scoring(request):
 @login_required
 def autowater(request):
     status = request.POST.get("status", '')
+    if status == "1":
+        GPIO.output(13,GPIO.HIGH)
+    elif status == "0":
+        GPIO.output(13,GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.autowater = status
     potstatus.save()
@@ -137,6 +147,10 @@ def autowater(request):
 
 def light(request):
     status = request.POST.get("status", '')
+    if status == "1":
+        GPIO.output(19,GPIO.HIGH)
+    elif status == "0":
+        GPIO.output(19,GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.light = status
     potstatus.save()
@@ -148,6 +162,10 @@ def light(request):
 
 def manualwater(request):
     status = request.POST.get("status", '')
+    if status == "1":
+        GPIO.output(26,GPIO.HIGH)
+    elif status == "0":
+        GPIO.output(26,GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.manualwater = status
     potstatus.save()
