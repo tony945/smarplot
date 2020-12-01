@@ -16,9 +16,9 @@ if __name__ == '__main__':
         plantId = plantIds[0][0]
         today = datetime.now()
         firstday = today.replace(day=1)
-        formatPreviousMonth = (firstday - datetime.timedelta(days=1)).strftime("%Y-%m") # Get the previous month
+        formatPreviousMonth = (firstday - timedelta(days=1)).strftime("%Y-%m") # Get the previous month
         
-        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatMonth)))
+        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatPreviousMonth)))
         monthlySensorRecord = cur.fetchall()
         averageSoil = monthlySensorRecord[0][0]
         averageTemp = monthlySensorRecord[0][1]
@@ -26,7 +26,7 @@ if __name__ == '__main__':
         averageLight = monthlySensorRecord[0][3]
 
         cur.execute("INSERT INTO gui_monthlysensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
-                (round(averageSoil,0), round(averageTemp,1), round(averageAir,0), round(averageLight,0), formatMonth, plantId))
+                (round(averageSoil,0), round(averageTemp,1), round(averageAir,0), round(averageLight,0), formatPreviousMonth, plantId))
     except mariadb.Error as e:
         print(e)
 

@@ -14,10 +14,9 @@ if __name__ == '__main__':
         cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
         plantIds = cur.fetchall()
         plantId = plantIds[0][0]
-        today = date.today()
         formatPreviousDay = (datetime.now()-timedelta(days=1)).strftime("%Y-%m-%d")
         
-        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatToday)))
+        cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatPreviousDay)))
         dailySensorRecord = cur.fetchall()
         averageSoil = dailySensorRecord[0][0]
         averageTemp = dailySensorRecord[0][1]
@@ -25,7 +24,7 @@ if __name__ == '__main__':
         averageLight = dailySensorRecord[0][3]
 
         cur.execute("INSERT INTO gui_dailysensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
-                (round(averageSoil,0), round(averageTemp,1), round(averageAir,0), round(averageLight,0), formatToday, plantId))
+                (round(averageSoil,0), round(averageTemp,1), round(averageAir,0), round(averageLight,0), formatPreviousDay, plantId))
     except mariadb.Error as e:
         print(e)
 
