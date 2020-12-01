@@ -1,5 +1,5 @@
 import mariadb
-from datetime import date
+from datetime import datetime, timedelta
 
 if __name__ == '__main__':
     
@@ -15,7 +15,7 @@ if __name__ == '__main__':
         plantIds = cur.fetchall()
         plantId = plantIds[0][0]
         today = date.today()
-        formatToday= today.strftime("%Y-%m-%d")
+        formatPreviousDay = (datetime.now()-timedelta(days=1)).strftime("%Y-%m-%d")
         
         cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatToday)))
         dailySensorRecord = cur.fetchall()

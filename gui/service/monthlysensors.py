@@ -1,5 +1,5 @@
 import mariadb
-from datetime import date
+from datetime import datetime, timedelta
 
 if __name__ == '__main__':
     
@@ -14,8 +14,9 @@ if __name__ == '__main__':
         cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
         plantIds = cur.fetchall()
         plantId = plantIds[0][0]
-        today = date.today()
-        formatMonth= today.strftime("%Y-%m") # Get the current month
+        today = datetime.now()
+        firstday = today.replace(day=1)
+        formatPreviousMonth = (firstday - datetime.timedelta(days=1)).strftime("%Y-%m") # Get the previous month
         
         cur.execute("SELECT AVG(soil), AVG(temperature), AVG(air), AVG(light)  FROM gui_sensorrecord WHERE plant_id = ? AND create_time LIKE ? ",(plantId,"{}%".format(formatMonth)))
         monthlySensorRecord = cur.fetchall()
