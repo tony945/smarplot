@@ -80,7 +80,6 @@ $(function () {
                 switch (timeRange) {
                     case 'year':
                         result.forEach(element => {
-                            console.log(element);
                             Datenow = new Date(element.create_time);
                             let year = Datenow.getFullYear();
                             let month = Datenow.getMonth();
@@ -91,7 +90,6 @@ $(function () {
                         break;
                     case 'month':
                         result.forEach(element => {
-                            console.log(element);
                             Datenow = new Date(element.create_time);
                             let year = Datenow.getFullYear();
                             let month = Datenow.getMonth();
