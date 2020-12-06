@@ -25,10 +25,15 @@ except:
 
 # Temporarily fix of the bug of adafruit_dht
 try:
+    LEDAUTO_PIN = 13
+    LEDMANUAL_PIN = 19
+    LEDLIGHT_PIN = 26
+    RELAY_PIN = 16
     os.system('pkill libgpiod')
-    GPIO.setup(13,GPIO.OUT)
-    GPIO.setup(19,GPIO.OUT)
-    GPIO.setup(26,GPIO.OUT)
+    GPIO.setup(LED1_PIN, GPIO.OUT)
+    GPIO.setup(LED2_PIN, GPIO.OUT)
+    GPIO.setup(LED3_PIN, GPIO.OUT)
+    GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setwarnings(False)
     # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
     #GPIO.setmode(GPIO.BOARD)
@@ -133,9 +138,9 @@ def scoring(request):
 def autowater(request):
     status = request.POST.get("status", '')
     if status == "1":
-        GPIO.output(13,GPIO.HIGH)
+        GPIO.output(LEDAUTO_PIN,GPIO.HIGH)
     elif status == "0":
-        GPIO.output(13,GPIO.LOW)
+        GPIO.output(LEDAUTO_PIN,GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.autowater = status
     potstatus.save()
@@ -148,9 +153,9 @@ def autowater(request):
 def light(request):
     status = request.POST.get("status", '')
     if status == "1":
-        GPIO.output(19,GPIO.HIGH)
+        GPIO.output(LEDLIGHT_PIN,GPIO.HIGH)
     elif status == "0":
-        GPIO.output(19,GPIO.LOW)
+        GPIO.output(LEDLIGHT_PIN,GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.light = status
     potstatus.save()
@@ -163,9 +168,11 @@ def light(request):
 def manualwater(request):
     status = request.POST.get("status", '')
     if status == "1":
-        GPIO.output(26,GPIO.HIGH)
+        GPIO.output(LEDMANUAL_PIN,GPIO.HIGH)
+        GPIO.output(RELAY_PIN, GPIO.LOW)
     elif status == "0":
-        GPIO.output(26,GPIO.LOW)
+        GPIO.output(LEDMANUAL_PIN,GPIO.LOW)
+        GPIO.output(RELAY_PIN, GPIO.HIGH)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.manualwater = status
     potstatus.save()
