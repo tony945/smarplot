@@ -25,15 +25,15 @@ except:
 
 # Temporarily fix of the bug of adafruit_dht
 try:
+    os.system('pkill libgpiod')
     LEDAUTO_PIN = 13
     LEDMANUAL_PIN = 19
     LEDLIGHT_PIN = 26
-    RELAY_PIN = 16
-    os.system('pkill libgpiod')
-    GPIO.setup(LED1_PIN, GPIO.OUT)
-    GPIO.setup(LED2_PIN, GPIO.OUT)
-    GPIO.setup(LED3_PIN, GPIO.OUT)
-    GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.HIGH)
+    RELAY_PIN = 23 
+    GPIO.setup(LEDAUTO_PIN, GPIO.OUT)
+    GPIO.setup(LEDMANUAL_PIN, GPIO.OUT)
+    GPIO.setup(LEDLIGHT_PIN, GPIO.OUT)
+    GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.LOW)
     GPIO.setwarnings(False)
     # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
     #GPIO.setmode(GPIO.BOARD)
@@ -169,10 +169,10 @@ def manualwater(request):
     status = request.POST.get("status", '')
     if status == "1":
         GPIO.output(LEDMANUAL_PIN,GPIO.HIGH)
-        GPIO.output(RELAY_PIN, GPIO.LOW)
+        GPIO.output(RELAY_PIN, GPIO.HIGH)
     elif status == "0":
         GPIO.output(LEDMANUAL_PIN,GPIO.LOW)
-        GPIO.output(RELAY_PIN, GPIO.HIGH)
+        GPIO.output(RELAY_PIN, GPIO.LOW)
     potstatus = PotStatus.objects.get(id=1)
     potstatus.manualwater = status
     potstatus.save()
