@@ -24,12 +24,15 @@ google.charts.setOnLoadCallback(() => {
         data: { 'timerange': 'day', },
         success: function (result) {
             result.forEach(element => {
-                Datenow = new Date(element.create_time)
+               
+                let Datenow = new Date(element.create_time.slice(0,-1))
                 let year = Datenow.getFullYear();
                 let month = Datenow.getMonth();
                 let date = Datenow.getDate();
                 let hour = Datenow.getHours();
                 let minute = Datenow.getMinutes();
+                console.log(Datenow);
+                console.log(year,month,date,hour,minute);
                 temp.push([new Date(year, month, date, hour, minute), element.temperature]);
                 moist.push([new Date(year, month, date, hour, minute), element.soil, element.air]);
                 light.push([new Date(year, month, date, hour, minute), element.light]);
@@ -80,7 +83,7 @@ $(function () {
                 switch (timeRange) {
                     case 'year':
                         result.forEach(element => {
-                            Datenow = new Date(element.create_time);
+                            let Datenow = new Date(element.create_time);
                             let year = Datenow.getFullYear();
                             let month = Datenow.getMonth();
                             temp.push([new Date(year, month), element.temperature]);
@@ -90,7 +93,7 @@ $(function () {
                         break;
                     case 'month':
                         result.forEach(element => {
-                            Datenow = new Date(element.create_time);
+                            let Datenow = new Date(element.create_time);
                             let year = Datenow.getFullYear();
                             let month = Datenow.getMonth();
                             let date = Datenow.getDate();
@@ -101,7 +104,7 @@ $(function () {
                         break;
                     case 'day':
                         result.forEach(element => {
-                            Datenow = new Date(element.create_time)
+                            let Datenow = new Date(element.create_time.slice(0,-1))
                             let year = Datenow.getFullYear();
                             let month = Datenow.getMonth();
                             let date = Datenow.getDate();
