@@ -1,11 +1,15 @@
-// 導覽列
+// Trigger onload
 
-$(function () { $("#realtime_panel").addClass("active"); });
-
+$(function () { 
+    // 導覽列
+    $("#realtime_panel").addClass("active"); 
+    // 抓資料
+    $(renew_data);
+});
 
 
 // 刷新即時資料
-$(renew_data());
+
 setInterval(renew_data, 5000);
 
 function renew_data() {

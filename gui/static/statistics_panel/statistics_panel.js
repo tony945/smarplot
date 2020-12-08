@@ -31,8 +31,6 @@ google.charts.setOnLoadCallback(() => {
                 let date = Datenow.getDate();
                 let hour = Datenow.getHours();
                 let minute = Datenow.getMinutes();
-                console.log(Datenow);
-                console.log(year,month,date,hour,minute);
                 temp.push([new Date(year, month, date, hour, minute), element.temperature]);
                 moist.push([new Date(year, month, date, hour, minute), element.soil, element.air]);
                 light.push([new Date(year, month, date, hour, minute), element.light]);
