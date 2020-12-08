@@ -25,6 +25,7 @@ except:
 
 # Temporarily fix of the bug of adafruit_dht
 try:
+    humiditySave = 0
     os.system('pkill libgpiod')
     LEDAUTO_PIN = 13
     LEDMANUAL_PIN = 19
@@ -199,8 +200,9 @@ def realtime_data_refresh(request):
         temp = "0"
     try:
         airHumidity = readHumidity()
+        humiditySave = airHumidity
     except Exception as e:
-        airHumidity = "0"
+        airHumidity = humiditySave
         print(e)
 
     # Pack the data into dict, then dump into json
