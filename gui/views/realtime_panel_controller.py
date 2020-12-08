@@ -73,7 +73,7 @@ try:
 except:
     print("Temperture sensor error")
 try:
-    # Humidity sensor
+    # Moisture sensor
     # Start SPI connection
     spi = spidev.SpiDev()  # Created an object
     spi.open(0, 0)
@@ -199,8 +199,9 @@ def realtime_data_refresh(request):
         temp = "0"
     try:
         airHumidity = readHumidity()
-    except:
+    except Exception as e:
         airHumidity = "0"
+        print(e)
 
     # Pack the data into dict, then dump into json
     data = {'light': light, 'temp': temp, 'soil': soilMoisture, 'air': airHumidity}
@@ -216,6 +217,11 @@ def analogInput(channel):
     adc = spi.xfer2([1, (8+channel) << 4, 0])
     data = ((adc[1] & 3) << 8) + adc[2]
     return data
+
+def readMoist():
+    data = analogInput(0)  # Reading from CH0
+    data = interp(data, [0, 1023], [0, 100])
+    return int(data)
 
 def readRawTemp():
     f = open(DEVICE_FILE, 'r')
@@ -244,11 +250,6 @@ def readLight():
     addr=DEVICE_ADDRESS
     data = I2C.read_i2c_block_data(addr, ONE_TIME_HIGH_RES_MODE_2)
     return round(convertToNumber(data), 0)
-
-def readMoist():
-    data = analogInput(0)  # Reading from CH0
-    data = interp(data, [0, 1023], [100, 0])
-    return int(data)
 
 def readHumidity():
     data = dhtDevice.humidity
