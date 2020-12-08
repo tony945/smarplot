@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 # 植物資料
 class Plant(models.Model):
     pid=models.AutoField(primary_key=True)
+    plant_type=models.CharField(max_length=10)
     plant_name=models.CharField(max_length=20)
     active=models.BooleanField(default=True)
     create_time=models.DateTimeField(auto_now=True)

@@ -4,7 +4,7 @@ $(function () {
     // 導覽列
     $("#realtime_panel").addClass("active"); 
     // 抓資料
-    $(renew_data);
+    renew_data;
 });
 
 
@@ -33,11 +33,11 @@ $(function () {
     $('#toggle_event_editing1 button').click(function () {
         if ($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')) {
             /* code to do when unlocking */
-            status = 1
+            status = 1;
         }
         else {
             /* code to do when locking */
-            status = 0
+            status = 0;
         }
 
         let csrftoken = $("[name=csrfmiddlewaretoken]").val();
@@ -67,11 +67,11 @@ $(function () {
     $('#toggle_event_editing2 button').click(function () {
         if ($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')) {
             /* code to do when unlocking */
-            status = 1
+            status = 1;
         }
         else {
             /* code to do when locking */
-            status = 0
+            status = 0;
         }
 
         let csrftoken = $("[name=csrfmiddlewaretoken]").val();
@@ -102,12 +102,12 @@ $(function () {
         if ($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')) {
             /* code to do when unlocking */
             $('#switch_status').html('開始澆花.');
-            status = 1
+            status = 1;
         }
         else {
             /* code to do when locking */
             $('#switch_status').html('手動澆花關閉.');
-            status = 0
+            status = 0;
         }
 
         let csrftoken = $("[name=csrfmiddlewaretoken]").val();
