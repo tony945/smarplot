@@ -105,7 +105,7 @@ def register_plant(request):
 @login_required
 def register_plant_action(request):
     plantname =request.POST.get("plantname", '')
-    plant = Plant.objects.create(plant_name=plantname)
+    plant = Plant.objects.create(plant_name=plantname,plant_type='1')
     # If the pot is yet registered, register it in db
     if not PotStatus.objects.all():
         PotStatus.objects.create(autowater=0, light=0, manualwater=0)
