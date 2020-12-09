@@ -109,6 +109,8 @@ if __name__ == '__main__':
         host="localhost",
         database="plant")
     cur = conn.cursor()
+
+    count = 0
     try:
         soil = readMoist()
     except:
@@ -117,16 +119,19 @@ if __name__ == '__main__':
         light = readLight()
     except:
         light = 0
+    
     try:
         air = readHumidity()
     except:
         air = 0
-    if air == 0:
-        sleep(2)
+        
+    while air == 0 and count <15:
+        sleep(3)
         try:
             air = readHumidity()
         except:
             air = 0
+            count+=1
     try:
         temp = read_temp()
     except:

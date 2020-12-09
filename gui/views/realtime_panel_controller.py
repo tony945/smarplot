@@ -222,7 +222,7 @@ def analogInput(channel):
 
 def readMoist():
     data = analogInput(0)  # Reading from CH0
-    data = interp(data, [0, 1023], [0, 100])
+    data = interp(data, [0, 1023], [100, 0])
     return int(data)
 
 def readRawTemp():
