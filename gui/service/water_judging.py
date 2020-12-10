@@ -1,3 +1,4 @@
+
 #!/usr/bin/python3
 # Importing modules
 import os
@@ -14,6 +15,7 @@ from time import strftime
 from datetime import datetime
 from numpy import interp  # To scale values
 from time import sleep
+from joblib import load
 
 import board
 import adafruit_dht
@@ -102,54 +104,71 @@ def readHumidity():
 
 
 if __name__ == '__main__':
-
-    conn = mariadb.connect(
-        user="tonychen",
-        password="killer945",
-        host="localhost",
-        database="plant")
-    cur = conn.cursor()
-
-    count = 0
-    try:
-        soil = readMoist()
-    except:
-        soil = 0
-    try:
-        light = readLight()
-    except:
-        light = 0
     
     try:
-        air = readHumidity()
+        soil = readMoist() 
     except:
-        air = 0
-        
-    while air == 0 and count <15:
-        sleep(3)
+        soil = 0
+           
+    if soil <= 50:
+        count = 0
+        try:
+            air = readHumidity()
+        except:
+            air = 1000 
+        try:
+            light = readLight()
+        except:
+            light = 0
         try:
             air = readHumidity()
         except:
             air = 0
-            count+=1
-    try:
-        temp = read_temp()
-    except:
-        temp = 0
+        
+        while air == 0 and count <15:
+            sleep(3)
+            try:
+                air = readHumidity()
+            except:
+                air = 0
+                count+=1
+        try:
+            temp = read_temp()
+        except:
+            temp = 0
 
-    now = datetime.now()
-    dateTime = now.strftime("%Y-%m-%d,%H:%M:%S")
+        # 單位轉換
+        
+        temp = temp/40
+        
+        # 載入模型
+        
+        knn = load('KNNplant.joblib')
+        print(knn.predict([[temp, air, light]]))
 
-    try:
-        cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
-        plantIds = cur.fetchall()
-        plantId = plantIds[0][0]
-        cur.execute("INSERT INTO gui_sensorrecord(soil,temperature,air,light,create_time,plant_id) VALUE(?,?,?,?,?,?)",
-                (soil, temp, air, light, dateTime, plantId))
-    except mariadb.Error as e:
-        print(e)
 
-    conn.commit()
-    conn.close()
+
+        conn = mariadb.connect(
+        user="tonychen",
+        password="killer945",
+        host="localhost",
+        database="plant")
+        cur = conn.cursor()
+        now = datetime.now()
+        dateTime = now.strftime("%Y-%m-%d,%H:%M:%S")
+        # username = request.session.get("user", '')
+        # user = User.objects.get(username=username)
+        user = 1
+        try:
+            cur.execute("SELECT pid FROM gui_plant WHERE active = ?",(1,))
+            plantIds = cur.fetchall()
+            plantId = plantIds[0][0]
+            cur.execute("INSERT INTO gui_sensorrecord(create_time,create_user,plant_id,user_id) VALUE(?,?,?,?,)",
+                    (dateTime,'10', plantId,user))
+        except mariadb.Error as e:
+            print(e)
+
+        conn.commit()
+        conn.close()
 
     os.system('pkill libgpiod')

@@ -34,7 +34,7 @@ try:
     GPIO.setup(LEDAUTO_PIN, GPIO.OUT)
     GPIO.setup(LEDMANUAL_PIN, GPIO.OUT)
     GPIO.setup(LEDLIGHT_PIN, GPIO.OUT)
-    GPIO.setup(RELAY_PIN, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup(RELAY_PIN, GPIO.OUT)
     GPIO.setwarnings(False)
     # GPIO.BOARD 選項是指定在電路版上接腳的號碼 / GPIO.BCM 選項是指定GPIO後面的號碼
     #GPIO.setmode(GPIO.BOARD)
@@ -222,7 +222,7 @@ def analogInput(channel):
 
 def readMoist():
     data = analogInput(0)  # Reading from CH0
-    data = interp(data, [0, 1023], [0, 100])
+    data = interp(data, [0, 1023], [100, 0])
     return int(data)
 
 def readRawTemp():

@@ -4,7 +4,7 @@ $(function () {
     // 導覽列
     $("#realtime_panel").addClass("active"); 
     // 抓資料
-    renew_data;
+    renew_data();
 });
 
 
